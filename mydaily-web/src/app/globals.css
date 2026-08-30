@@ -1,0 +1,171 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ============ 设计令牌（浅色治愈系） ============ */
+:root {
+  --color-bg: #faf9f6;
+  --color-surface: #ffffff;
+  --color-primary: #c8b79e;
+  --color-accent: #a3b18a;
+  --color-text: #2d2a26;
+  --color-muted: #8b8a8a;
+  /* RGB 三元组：供 Tailwind 透明度修饰符（如 bg-primary/20）使用 */
+  --color-bg-rgb: 250 249 246;
+  --color-surface-rgb: 255 255 255;
+  --color-primary-rgb: 200 183 158;
+  --color-accent-rgb: 163 177 138;
+  --color-text-rgb: 45 42 38;
+  --color-muted-rgb: 139 138 138;
+  --radius-card: 16px;
+  --radius-pill: 9999px;
+  /* 精密排版基础单位：随视口按比例放大，保证像素级对齐
+     字号比例：title = u*7（大标题），subtitle = u*2，正文 = u*1.75 */
+  --u: 8px;
+  --u-md: 9px;
+  --u-lg: 10px;
+}
+
+@media (min-width: 640px) {
+  :root { --u: var(--u-md); }
+}
+@media (min-width: 1024px) {
+  :root { --u: var(--u-lg); }
+}
+
+/* 暗色模式（通过 .dark 类切换，默认跟随系统） */
+.dark {
+  --color-bg: #191715;
+  --color-surface: #24211d;
+  --color-primary: #c8b79e;
+  --color-accent: #a3b18a;
+  --color-text: #f2efe9;
+  --color-muted: #a09c94;
+  --color-bg-rgb: 25 23 21;
+  --color-surface-rgb: 36 33 29;
+  --color-primary-rgb: 200 183 158;
+  --color-accent-rgb: 163 177 138;
+  --color-text-rgb: 242 239 233;
+  --color-muted-rgb: 160 156 148;
+}
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+  body {
+    @apply bg-bg text-text font-sans antialiased;
+    transition: background-color 0.3s ease, color 0.3s ease;
+  }
+  h1, h2, h3, h4 {
+    @apply font-serif;
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-accent);
+    outline-offset: 2px;
+    border-radius: 4px;
+  }
+}
+
+@layer components {
+  /* 胶囊按钮 */
+  .btn {
+    @apply inline-flex items-center justify-center gap-2 rounded-pill px-6 py-2.5 font-sans text-sm font-medium transition-all duration-200 select-none;
+  }
+  .btn:disabled {
+    @apply opacity-50 cursor-not-allowed;
+  }
+  .btn-primary {
+    @apply btn bg-primary text-[#2d2a26];
+  }
+  .btn-primary:not(:disabled):hover {
+    filter: brightness(1.05);
+    transform: translateY(-1px);
+    box-shadow: 0 8px 20px rgba(200, 183, 158, 0.35);
+  }
+  .btn-white {
+    @apply btn bg-white text-[#2d2a26] border border-black/5;
+  }
+  .btn-white:not(:disabled):hover {
+    box-shadow: 0 8px 24px rgba(45, 42, 38, 0.12);
+    transform: translateY(-1px);
+  }
+  .btn-ghost {
+    @apply btn bg-transparent text-muted;
+  }
+  .btn-ghost:not(:disabled):hover {
+    @apply text-text bg-black/5;
+  }
+  .btn-danger {
+    @apply btn bg-[#c0392b]/10 text-[#c0392b];
+  }
+  .btn-danger:not(:disabled):hover {
+    background-color: #c0392b;
+    color: #fff;
+  }
+
+  /* 卡片 */
+  .card {
+    @apply bg-surface rounded-card shadow-card p-pad;
+  }
+
+  /* 表单 */
+  .field-label {
+    @apply block text-sm font-medium text-muted mb-1.5;
+  }
+  .input {
+    @apply w-full rounded-xl border border-black/10 bg-bg px-4 py-2.5 text-sm text-text placeholder:text-muted/70 transition-colors;
+  }
+  .input:focus {
+    @apply outline-none border-accent;
+    box-shadow: 0 0 0 3px rgba(163, 177, 138, 0.25);
+  }
+  .dark .input {
+    @apply border-white/10 bg-surface;
+  }
+  .form-error {
+    @apply mt-1 text-xs text-[#c0392b];
+  }
+}
+
+/* ============ 入场动画（上升淡入，电影感曲线） ============ */
+.rise {
+  animation: rise 0.8s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+/* ============ Lenis 平滑滚动 ============ */
+html.lenis,
+html.lenis body {
+  height: auto;
+}
+.lenis.lenis-smooth {
+  scroll-behavior: auto !important;
+}
+.lenis.lenis-smooth [data-lenis-prevent] {
+  overscroll-behavior: contain;
+}
+.lenis.lenis-stopped {
+  overflow: hidden;
+}
+
+/* 尊重系统减弱动效偏好 */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  .rise,
+  .animate-rise,
+  .animate-fadeIn {
+    animation: none !important;
+    opacity: 1 !important;
+    transform: none !important;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    filter: none !important;
+  }
+}

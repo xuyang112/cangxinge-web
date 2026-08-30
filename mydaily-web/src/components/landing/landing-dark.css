@@ -1,0 +1,159 @@
+/* ============================================================
+   藏心阁 深色霓虹玻璃拟物落地页
+   渐变文字 + 玻璃卡片 + 漂浮光斑 + 星链粒子网络 + 滚动揭示
+   ============================================================ */
+
+.cangxinge-landing {
+  font-family: "PingFang SC", "Noto Sans SC", system-ui, sans-serif;
+  background: #0a061a;
+  color: #fff;
+}
+
+/* ---------- 渐变文字（紫→蓝→青，流动） ---------- */
+.cangxinge-landing .gradient-text {
+  background: linear-gradient(135deg, #7c3aed, #2563eb, #22d3ee);
+  background-clip: text;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-size: 200% 200%;
+  animation: gradientShift 4s ease infinite;
+}
+@keyframes gradientShift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+/* ---------- 玻璃卡片 ---------- */
+.cangxinge-landing .glass {
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 1.5rem;
+}
+
+/* ---------- 漂浮光斑 ---------- */
+.cangxinge-landing .blob {
+  position: absolute;
+  border-radius: 50%;
+  filter: blur(80px);
+  opacity: 0.4;
+  animation: float 8s ease-in-out infinite;
+  pointer-events: none;
+}
+.cangxinge-landing .blob-1 { width: 400px; height: 400px; background: #7c3aed; top: -100px; left: -100px; }
+.cangxinge-landing .blob-2 { width: 350px; height: 350px; background: #2563eb; top: 200px; right: -50px; animation-delay: 2s; }
+.cangxinge-landing .blob-3 { width: 300px; height: 300px; background: #22d3ee; bottom: 100px; left: 30%; animation-delay: 4s; }
+@keyframes float {
+  0%, 100% { transform: translate(0, 0) scale(1); }
+  33% { transform: translate(30px, -30px) scale(1.05); }
+  66% { transform: translate(-20px, 20px) scale(0.95); }
+}
+
+/* ---------- 紫色文字光晕 ---------- */
+.cangxinge-landing .text-glow {
+  text-shadow: 0 0 30px rgba(124, 58, 237, 0.5);
+}
+
+/* ---------- 滚动后的导航 ---------- */
+.cangxinge-landing .nav-scrolled {
+  background: rgba(10, 6, 26, 0.85) !important;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+/* ---------- 星链粒子网络 ---------- */
+.cangxinge-landing .network-container {
+  width: 100%;
+  max-width: 480px;
+  aspect-ratio: 1;
+  position: relative;
+}
+.cangxinge-landing .network-container canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+.cangxinge-landing .network-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 1.5rem;
+  background: linear-gradient(transparent, rgba(10, 6, 26, 0.8));
+  text-align: center;
+}
+.cangxinge-landing .network-overlay .status {
+  font-size: 0.75rem;
+  color: rgba(34, 211, 238, 0.8);
+  letter-spacing: 0.1em;
+}
+
+/* ---------- 滚动揭示元素：初始隐藏，由 GSAP 揭晓 ---------- */
+.cangxinge-landing .reveal {
+  opacity: 0;
+}
+
+/* ---------- 功能卡片 hover ---------- */
+.cangxinge-landing .feature-card {
+  transition: all 0.3s ease;
+}
+.cangxinge-landing .feature-card:hover {
+  transform: translateY(-8px) scale(1.02);
+  box-shadow: 0 20px 60px rgba(124, 58, 237, 0.25);
+}
+
+/* ---------- MagicBento 边框光效（跟随光标） ---------- */
+.cangxinge-landing .glow-card {
+  position: relative;
+  --glow-x: 50%;
+  --glow-y: 50%;
+  --glow-intensity: 0;
+  --glow-radius: 220px;
+  --glow-color: 132, 0, 255;
+  transition: box-shadow 0.3s ease;
+}
+
+.cangxinge-landing .glow-card::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  padding: 2px;
+  border-radius: inherit;
+  background: radial-gradient(
+    var(--glow-radius) circle at var(--glow-x) var(--glow-y),
+    rgba(var(--glow-color), calc(var(--glow-intensity) * 0.9)) 0%,
+    rgba(var(--glow-color), calc(var(--glow-intensity) * 0.4)) 30%,
+    transparent 60%
+  );
+  -webkit-mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask:
+    linear-gradient(#fff 0 0) content-box,
+    linear-gradient(#fff 0 0);
+  mask-composite: exclude;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.cangxinge-landing .glow-card:hover {
+  box-shadow:
+    0 4px 20px rgba(46, 24, 78, 0.4),
+    0 0 30px rgba(var(--glow-color), 0.15);
+}
+
+/* 尊重系统减弱动效：
+   关闭光斑/渐变流动，并将被 GSAP 隐藏的 .reveal 元素直接显示出来 */
+@media (prefers-reduced-motion: reduce) {
+  .cangxinge-landing .blob,
+  .cangxinge-landing .gradient-text {
+    animation: none !important;
+  }
+  .cangxinge-landing .reveal {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}

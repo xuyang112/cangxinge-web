@@ -1,0 +1,169 @@
+/* ============================================================
+   Hero 首屏：视频背景 + 精密排版（--u 单位） + 底部合作条
+   层级：media(z:-2) < darken(z:-1) < content(z:0)
+   ============================================================ */
+
+.hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  display: flex;
+  min-height: 100svh;
+  flex-direction: column;
+  background: transparent;
+}
+
+/* ---------- 背景层：视频 + 遮罩 ---------- */
+.hero-media {
+  position: absolute;
+  inset: 0;
+  z-index: -2;
+}
+
+.hero-video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* 米白轻蒙层：保留品牌调性 + 保证深色文字可读（暗色模式自动换深色）。
+   调得很淡，让视频背景更清晰地透出来；若文字不够清晰可再微调。 */
+.hero-scrim {
+  position: absolute;
+  inset: 0;
+  background: rgba(250, 249, 246, 0.22);
+}
+.dark .hero-scrim {
+  background: rgba(25, 23, 21, 0.38);
+}
+
+/* 底部深色渐变：保证底部文字/合作条可读 */
+.hero-vignette {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, transparent 52%, rgba(23, 21, 19, 0.58) 100%);
+}
+
+/* 电影感暗色遮罩：随滚动 opacity 0 → 0.6（由 motion 驱动，默认 0 不遮挡） */
+.hero-darken {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  background: #171513;
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ---------- 内容区：精密排版（基于 --u） ---------- */
+.hero-content {
+  position: relative;
+  z-index: 0;
+  flex: 1;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: 72rem;
+  margin-inline: auto;
+  padding: calc(var(--u) * 12) calc(var(--u) * 3) calc(var(--u) * 8);
+}
+
+.hero-grid {
+  display: flex;
+  width: 100%;
+}
+
+.hero-copy {
+  text-align: left;
+  max-width: 34rem;
+}
+
+/* 主标题：细衬线 editorial，字号比之前略大、字重 500，加柔和白色投影使其从明亮背景中"浮"出来 */
+.hero-title {
+  font-family: "Noto Serif SC", "Songti SC", "STSong", Georgia, serif;
+  font-size: clamp(2.25rem, 5.2vw, 4rem);
+  font-weight: 500;
+  line-height: 1.15;
+  letter-spacing: 0.05em;
+  color: var(--color-text);
+  text-rendering: optimizeLegibility;
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.45), 0 6px 22px rgba(255, 255, 255, 0.3);
+}
+
+/* 副标题：加深到正文色、加大字号、加重字重，去掉导致换行的 max-width，保持一行 */
+.hero-subtitle {
+  margin-top: calc(var(--u) * 3);
+  font-size: calc(var(--u) * 2);
+  line-height: 1.6;
+  color: var(--color-text);
+  font-weight: 500;
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.4), 0 4px 14px rgba(255, 255, 255, 0.25);
+}
+
+/* CTA：白色胶囊 + 幽灵文本链接 */
+.hero-cta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: calc(var(--u) * 3);
+  margin-top: calc(var(--u) * 5);
+}
+
+/* 在明亮视频背景上增强按钮可读性（边框 + 深色文字 + 轻底色） */
+.hero .btn-white {
+  box-shadow: 0 6px 22px rgba(45, 42, 38, 0.2);
+}
+.hero .btn-ghost {
+  border: 1px solid rgb(var(--color-text-rgb) / 0.5);
+  color: var(--color-text);
+  background: rgba(var(--color-bg-rgb) / 0.42);
+}
+.hero .btn-ghost:not(:disabled):hover {
+  background: rgba(var(--color-text-rgb) / 0.9);
+  color: var(--color-bg);
+  border-color: transparent;
+}
+
+/* ---------- 首屏底部：合作伙伴 logo 条（浅灰，叠在深色渐变上） ---------- */
+.hero-partners {
+  position: relative;
+  z-index: 0;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: calc(var(--u) * 7);
+  padding: calc(var(--u) * 4) calc(var(--u) * 3) calc(var(--u) * 5);
+}
+
+.hero-partner {
+  display: inline-flex;
+  align-items: center;
+  gap: calc(var(--u) * 1.5);
+  font-family: "Noto Serif SC", Georgia, serif;
+  font-size: calc(var(--u) * 1.5);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: rgba(255, 255, 255, 0.72);
+  opacity: 0.9;
+  transition: opacity 0.3s ease;
+}
+.hero-partner:hover {
+  opacity: 1;
+}
+
+/* ParticleText 在 Hero 中左对齐 */
+.hero .particle-text {
+  justify-content: flex-start;
+}
+
+/* ---------- StrokeText 标题：颜色随主题切换 ----------
+   组件本身以内联 SVG 属性传入颜色，CSS 优先级更高，
+   这里用主题令牌覆盖，保证暗色模式下标题依然清晰可读。 */
+.hero .stroke-text__stroke {
+  stroke: var(--color-primary);
+}
+.hero .stroke-text__fill {
+  fill: var(--color-text);
+}
