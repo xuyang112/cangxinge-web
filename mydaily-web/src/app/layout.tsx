@@ -10,6 +10,17 @@ export const metadata: Metadata = {
     template: "%s | 藏心阁",
   },
   description: "日记 · 学习 · 生活，一个就够了。个人记录 SaaS，私密、轻量、治愈。",
+  openGraph: {
+    title: "藏心阁 - 记录你的每一天",
+    description: "把心事，藏进一座阁楼。日记、学习与生活的私密个人记录空间。",
+    type: "website",
+    locale: "zh_CN",
+  },
+  twitter: {
+    card: "summary",
+    title: "藏心阁 - 记录你的每一天",
+    description: "把心事，藏进一座阁楼。日记、学习与生活的私密个人记录空间。",
+  },
   icons: { icon: "/favicon.svg" },
 };
 

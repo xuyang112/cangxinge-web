@@ -10,10 +10,14 @@
 
 # next.js
 /.next/
+/.next.nextjs-backup/
+/.vinext/
 /out/
 
 # production
 /build
+/dist/
+/.wrangler/
 
 # misc
 .DS_Store
